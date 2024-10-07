@@ -9,14 +9,23 @@ jobs:
     name: Test
     strategy:
       matrix:
-        go: ['1.21', '1.20', '1.19']
+        go: ['1.23', '1.22', '1.21', '1.20']
         platform: [ubuntu-latest] # can not run in windows OS
     runs-on: ubuntu-latest
+    services:
+      libsql:
+        image: ghcr.io/tursodatabase/libsql-server:v0.24.14
+        env:
+          RUST_BACKTRACE: full
+          SQLD_HTTP_LISTEN_ADDR: '0.0.0.0:18080'
+        ports:
+          - 18080:18080 # allows access via localhost:18080
     steps:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
         go-version: ${{ matrix.go }}
     - uses: actions/checkout@v3
+    - run: "sleep 30"
     - name: Test
       run: go test -v -cover .

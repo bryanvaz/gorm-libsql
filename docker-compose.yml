@@ -1,0 +1,15 @@
+
+services:
+  libsql:
+    image: ghcr.io/tursodatabase/libsql-server:v0.24.14
+    platform: linux/amd64
+    ports:
+      # - "8080:8080"
+      - "18080:18080"
+      - "5001:5001"
+    environment:
+      - RUST_BACKTRACE=full
+      - SQLD_HTTP_LISTEN_ADDR=0.0.0.0:18080
+      # - SQLD_HTTP_AUTH=always
+    volumes:
+      - ./.data/libsql:/var/lib/sqld
